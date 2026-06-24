@@ -1,0 +1,54 @@
+services:
+  mongod:
+    image: mongodb/mongodb-community-server:6.0-ubi9-slim
+    container_name: mongod
+    hostname: mongod
+    command: mongod --replSet rs0
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongodb/initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+      - mongodb-data:/data/db/
+      - mongodb-log:/var/log/mongodb/
+    env_file:
+      - .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+    networks:
+      - mongodb_network
+  mongot:
+    image: mongodb/mongodb-community-search:0.67.0
+    ports:
+      - 27028:27028
+    depends_on:
+      - mongod
+    networks:
+      - mongodb_network
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_EXPRESS_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_EXPRESS_PASSWORD}
+      ME_CONFIG_MONGODB_URL: mongodb://admin:password@mongodb:27017/
+    networks:
+      - mongodb_network
+    depends_on:
+      - mongod
+volumes:
+  mongodb-data:
+    driver: local
+    name: mongo-data
+  mongodb-log:
+    driver: local
+    name: mongo-log
+networks:
+  mongodb_network:
+    driver: bridge
+    name: mongo-network
