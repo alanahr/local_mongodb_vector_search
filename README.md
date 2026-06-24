@@ -4,7 +4,7 @@
 
 # Local mongodb rag - WORK IN PROGRESS
 
-This is a test to learn how to use mongodb community edition with search and vector search. 
+This is a test to learn how to use mongodb community edition with search and vector search. Goal is using GraphRAG
 
 
 ## Sources
@@ -14,5 +14,7 @@ https://www.mongodb.com/docs/vector-search/tutorials/local-rag/?language-no-inte
 https://www.mongodb.com/docs/manual/administration/install-community/?operating-system=docker&search-docker=with-search-docker
 
 https://www.mongodb.com/docs/search/tutorial/partial-match/?deployment-type=local-onprem&interface=mongosh
+
+https://www.mongodb.com/docs/atlas/ai-integrations/langchain/graph-rag/
 
 https://kind.sigs.k8s.io/docs/user/quick-start
